@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import AnimePahe from '@/lib/consumet/anime/animepahe';
 
+export const runtime = 'edge';
+
 export async function GET(
   request: Request,
   { params }: { params: { animeId: string } }
