@@ -7,11 +7,28 @@ export async function GET(
   { params }: { params: { link: string[] } }
 ) {
   try {
-    const directLink = decodeURIComponent(params.link.join('/'));
+    // Reconstruct the URL from the catch-all segments.
+    // The 'link' parameter is an array of path segments.
+    // For a URL like /api/download/https:/example.com/foo, params.link would be ['https:', 'example.com', 'foo']
+    // So we need to join them back. The first part (https:) loses its slashes.
+    let directLink: string;
+    if (params.link[0].startsWith('http')) {
+        // If it looks like a URL, re-add the // after the protocol.
+        directLink = params.link[0] + '//' + params.link.slice(1).join('/');
+    } else {
+        directLink = params.link.join('/');
+    }
+    
+    // The search parameters from the original request need to be appended.
+    const search = request.nextUrl.search;
+    if (search) {
+        directLink += search;
+    }
+
 
     if (!directLink || !directLink.startsWith('http')) {
       return NextResponse.json(
-        { error: 'A valid, decodable, absolute URL is required.' },
+        { error: 'A valid, absolute URL is required.' },
         { status: 400 }
       );
     }
@@ -45,10 +62,17 @@ export async function GET(
         }
     } else {
         try {
-            const urlPath = new URL(directLink).pathname;
-            const lastSegment = urlPath.substring(urlPath.lastIndexOf('/') + 1);
-            if (lastSegment) {
-                filename = lastSegment;
+            const url = new URL(directLink);
+            const urlPath = url.pathname;
+            // Check for filename in query params first
+            const fileQueryParam = url.searchParams.get('file') || url.searchParams.get('filename')
+            if(fileQueryParam){
+                filename = fileQueryParam;
+            } else {
+                const lastSegment = urlPath.substring(urlPath.lastIndexOf('/') + 1);
+                if (lastSegment) {
+                    filename = lastSegment;
+                }
             }
         } catch (e) {
             // ignore invalid url error
