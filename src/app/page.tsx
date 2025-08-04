@@ -58,7 +58,7 @@ export default function Home() {
               <CardTitle>Get Episode Sources</CardTitle>
               <CardDescription>
                 Fetch video sources for a specific episode.
-              </-card_description>
+              </CardDescription>
             </CardHeader>
             <CardContent>
               <CodeBlock text="/api/animepahe/sources/{episodeId}" />
