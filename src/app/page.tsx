@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Code, Download, FileSearch, Film, Info } from 'lucide-react';
+import { ThemeToggle } from '@/components/theme-toggle';
 
 export default function Home() {
   const exampleAnimeId = 'bfa8d26d-3bc8-7634-4a6c-441f7362a4cf';
@@ -8,6 +9,9 @@ export default function Home() {
   
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <div className="absolute top-4 right-4">
+        <ThemeToggle />
+      </div>
       <main className="container mx-auto max-w-5xl px-4 py-8 sm:py-12 md:py-16">
         <header className="text-center mb-12">
           <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl flex items-center justify-center gap-4">
@@ -54,7 +58,7 @@ export default function Home() {
               <CardTitle>Get Episode Sources</CardTitle>
               <CardDescription>
                 Fetch video sources for a specific episode.
-              </CardDescription>
+              </d_card_description>
             </CardHeader>
             <CardContent>
               <CodeBlock text="/api/animepahe/sources/{episodeId}" />
