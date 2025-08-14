@@ -15,18 +15,19 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "Hello World Console"
+args = "Next.js Dev Server"
 
 [[workflows.workflow]]
-name = "Hello World Console"
+name = "Next.js Dev Server"
 author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "node hello.js"
+args = "npm run dev"
+waitForPort = 3000
 
 [workflows.workflow.metadata]
-outputType = "console"
+outputType = "webview"
 
 [[ports]]
 localPort = 3000
