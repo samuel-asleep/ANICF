@@ -14,12 +14,14 @@ import {
   IVideo,
 } from '../models';
 import { USER_AGENT } from '../utils';
+import { KwikExtractor } from '../../kwik-extractor';
 
 class AnimePahe extends AnimeParser {
   override readonly name = 'AnimePahe';
   protected override baseUrl = 'https://animepahe.ru';
   protected override logo = 'https://animepahe.com/pikacon.ico';
   protected override classPath = 'ANIME.AnimePahe';
+  private kwikExtractor = new KwikExtractor();
 
   /**
    * @param query Search query
@@ -183,27 +185,29 @@ class AnimePahe extends AnimeParser {
       
       const directDownloadsPromises = paheLinks.map(async (paheLink) => {
         try {
-          const authToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.O0FKaqhJjEZgCAVfZoLz6Pjd7Gs9Kv6qi0P8RyATjaE';
-          const response = await fetch(`https://access-kwik.apex-cloud.workers.dev/`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              "service": "kwik",
-              "action": "fetch",
-              "content": { kwik: paheLink.kwik },
-              "auth": authToken,
-            })
-          });
-
-          const responseData = await response.json();
-
-          if (responseData.status) {
-            sources.push({ url: responseData.content.url, quality: `Direct - ${paheLink.name}` });
+          // Use our own Kwik extractor instead of external service
+          const extractResult = await this.kwikExtractor.extract(paheLink.kwik);
+          
+          if (extractResult.success && extractResult.directLink) {
+            // Add direct download link if extraction was successful
+            sources.push({ 
+              url: extractResult.directLink, 
+              quality: `Direct - ${paheLink.name}` 
+            });
           }
-          sources.push({ url: paheLink.kwik, quality: `Kwik Page - ${paheLink.name}` });
+          
+          // Always add the Kwik page as fallback option
+          sources.push({ 
+            url: paheLink.kwik, 
+            quality: `Kwik Page - ${paheLink.name}` 
+          });
+          
         } catch (error) {
-           // If direct download fails, we can add the kwik page as a fallback.
-           sources.push({ url: paheLink.kwik, quality: `Kwik Page - ${paheLink.name}` });
+          // If extraction fails, add the kwik page as fallback
+          sources.push({ 
+            url: paheLink.kwik, 
+            quality: `Kwik Page - ${paheLink.name}` 
+          });
         }
       });
       

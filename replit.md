@@ -32,7 +32,17 @@ Preferred communication style: Simple, everyday language.
 - **Component Library**: Radix UI for accessible, headless components
 - **Responsive Design**: Tailwind CSS for utility-first styling
 - **Development Experience**: Hot reload and fast refresh enabled
+- **Self-Contained Extraction**: Integrated custom Kwik link extractor to eliminate external API dependencies
 
 ## External Dependencies
 
 The project uses multiple external packages for UI functionality, styling, and development tools. All dependencies are managed through npm and defined in package.json.
+
+## Recent Changes
+
+### Kwik Link Extraction Integration (August 2025)
+- Implemented custom Kwik link extractor to replace external API dependency
+- Added `src/lib/kwik-extractor.ts` with TypeScript implementation
+- Updated AnimepaHe service to use self-contained extraction logic
+- Eliminated dependency on `https://access-kwik.apex-cloud.workers.dev/`
+- Improved reliability and reduced external service dependencies
