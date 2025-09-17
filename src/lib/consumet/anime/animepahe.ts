@@ -18,7 +18,7 @@ import { KwikExtractor } from '../../kwik-extractor';
 
 class AnimePahe extends AnimeParser {
   override readonly name = 'AnimePahe';
-  protected override baseUrl = 'https://animepahe.ru';
+  protected override baseUrl = process.env.ANIMEPAHE_BASE_URL || 'https://animepahe.si';
   protected override logo = 'https://animepahe.com/pikacon.ico';
   protected override classPath = 'ANIME.AnimePahe';
   private kwikExtractor = new KwikExtractor();
@@ -264,8 +264,9 @@ class AnimePahe extends AnimeParser {
   };
 
   private Headers(sessionId: string | false): HeadersInit {
+    const domain = new URL(this.baseUrl).hostname;
     return {
-      'authority': 'animepahe.ru',
+      'authority': domain,
       'accept': 'application/json, text/javascript, */*; q=0.01',
       'accept-language': 'en-US,en;q=0.9',
       'accept-encoding': 'gzip, deflate, br',
@@ -281,7 +282,7 @@ class AnimePahe extends AnimeParser {
       'sec-fetch-site': 'same-origin',
       'upgrade-insecure-requests': '1',
       'x-requested-with': 'XMLHttpRequest',
-      'referer': `https://animepahe.ru/`,
+      'referer': `${this.baseUrl}/`,
       'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
     };
   }
