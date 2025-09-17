@@ -40,6 +40,13 @@ The project uses multiple external packages for UI functionality, styling, and d
 
 ## Recent Changes
 
+### AnimePahe Base URL Update (September 2025)
+- Updated AnimePahe base URL from `animepahe.ru` to `animepahe.si`
+- Made base URL configurable via `ANIMEPAHE_BASE_URL` environment variable
+- Updated all references in `src/lib/consumet/anime/animepahe.ts` and `src/lib/consumet/extractors/kwik.ts`
+- Added `.env.example` file to document configuration options
+- Maintains backwards compatibility with default fallback to `https://animepahe.si`
+
 ### Kwik Link Extraction Integration (August 2025)
 - Implemented custom Kwik link extractor to replace external API dependency
 - Added `src/lib/kwik-extractor.ts` with TypeScript implementation
